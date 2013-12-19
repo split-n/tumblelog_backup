@@ -1,0 +1,5 @@
+apikey.yml
+Gemfile.lock
+*.swp
+vendor/
+.bundle/
