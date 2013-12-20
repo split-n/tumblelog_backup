@@ -30,7 +30,7 @@ class Post
     DateTime.parse(@data["date"])
   end
 
-  def save
+  def save(store_obj)
     # photo,videoはhrefから個別ファイルとして保存
     # その他はとりあえずjsonのままで
     case type
@@ -54,21 +54,32 @@ class Posts
   end
 
   def each
-    # 20件ずつ落ちてくる
-    # 全件取得後は空の[]が取得されるだけ
     unless block_given?
       return self.to_enum
     end
 
-    offset = 0
-    loop do
+    each_from_to do |post|
+      yield post
+    end
+
+  end
+
+  def each_from_to(from=0,to=Float::Infinity)
+    #  標準の引数の場合、eachと同等の動作をする
+    unless block_given?
+      return self.to_enum(:each_from_to,from,to)
+    end
+
+    from.step(to,20) do |offset|
+      # 20件ずつ落ちてくる
+      # 全件取得後は空の[]が取得されるだけ
       posts_20 = @client.posts(tumblr_host,offset: offset)["posts"]
       break if posts_20.empty?
       posts_20.each do |postdata|
         yield Post.new(postdata)
       end
-      offset += 20
     end
+
   end
 
 end
