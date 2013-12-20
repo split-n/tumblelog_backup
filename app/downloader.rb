@@ -1,5 +1,4 @@
 # encoding:utf-8
-require 'json'
 
 class TbDownloader
   def initialize(tumblr_host,oauth_config)

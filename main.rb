@@ -2,6 +2,7 @@
 require 'bundler'
 require 'optparse'
 require 'yaml'
+require_relative 'app/downloader'
 
 
 options = {}
