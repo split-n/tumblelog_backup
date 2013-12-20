@@ -49,7 +49,8 @@ class Posts
   include Enumerable
 
   def initialize(tumblr_host,oauth_config)
-    @client = Tumblr::Client.new(config)
+    @tumblr_host = tumblr_host
+    @client = Tumblr::Client.new(oauth_config)
   end
 
   def each
@@ -63,7 +64,7 @@ class Posts
 
   end
 
-  def each_from_to(from=0,to=Float::Infinity)
+  def each_from_to(from=0,to=Float::INFINITY)
     #  標準の引数の場合、eachと同等の動作をする
     unless block_given?
       return self.to_enum(:each_from_to,from,to)
@@ -72,8 +73,9 @@ class Posts
     from.step(to,20) do |offset|
       # 20件ずつ落ちてくる
       # 全件取得後は空の[]が取得されるだけ
-      posts_20 = @client.posts(tumblr_host,offset: offset)["posts"]
-      break if posts_20.empty?
+      # ホストが無効な場合はnil
+      posts_20 = @client.posts(@tumblr_host,offset: offset)["posts"]
+      break if posts_20.nil? || posts_20.empty?
       posts_20.each do |postdata|
         yield Post.new(postdata)
       end
