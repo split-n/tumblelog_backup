@@ -1,21 +1,5 @@
 # encoding:utf-8
 
-class TbDownloader
-  def initialize(tumblr_host,oauth_config)
-    @posts = Posts.new(tumblr_host,oauth_config)
-    @store = SaveStore.new
-  end
-
-  def download_all
-    
-  end
-
-  def download_times(times)
-    # times 個dlして終了
-
-  end
-end
-
 class Post
   def initialize(post_data)
     @data = post_data
