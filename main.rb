@@ -12,7 +12,10 @@ OptionParser.new do |parser|
   parser.parse!(ARGV)
 end
 
-exit unless options[:account]
+unless options[:account]
+  $stderr.puts "invalid arguements"
+  exit(1)
+end
 Account = options[:account]
 
 if options[:development]
