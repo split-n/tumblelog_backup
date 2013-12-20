@@ -24,13 +24,8 @@ else
   Bundler.require
 end
 
-config = YAML.load_file("apikey.yml")
+tmp = YAML.load_file("apikey.yml")
+config = tmp.each_with_object({}){|(k,v),obj| obj[k.to_sym] = v} 
 
 
-Tumblr.configure do |conf|
-  conf.consumer_key = config["consumer_key"]
-  conf.consumer_secret = config["consumer_secret"]
-  conf.oauth_token = config["oauth_token"]
-  conf.oauth_token_secret = config["oauth_token_secret"]
-end
 
