@@ -35,7 +35,14 @@ class Tumblelog
   def initialize(tumblr_host,oauth_config)
     @tumblr_host = tumblr_host
     @client = Tumblr::Client.new(oauth_config)
+    blog_info = @client.blog_info(@tumblr_host)
+    if blog_info["status"] == 404
+      raise ArgumentError.new("Invalid Hostname")
+    else
+      @blog_info = blog_info
+    end
   end
+
 
   def each_post
     unless block_given?
