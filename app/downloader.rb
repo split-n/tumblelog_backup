@@ -45,7 +45,7 @@ class Post
 end
 
 
-class Posts
+class Tumblelog
   include Enumerable
 
   def initialize(tumblr_host,oauth_config)
@@ -53,21 +53,21 @@ class Posts
     @client = Tumblr::Client.new(oauth_config)
   end
 
-  def each
+  def each_post
     unless block_given?
-      return self.to_enum
+      return self.to_enum(:each_post)
     end
 
-    each_from_to do |post|
+    each_post_ranged do |post|
       yield post
     end
 
   end
 
-  def each_from_to(from=0,to=Float::INFINITY)
+  def each_post_ranged(from=0,to=Float::INFINITY)
     #  標準の引数の場合、eachと同等の動作をする
     unless block_given?
-      return self.to_enum(:each_from_to,from,to)
+      return self.to_enum(:each_post_ranged,from,to)
     end
 
     from.step(to,20) do |offset|
