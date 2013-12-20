@@ -17,6 +17,34 @@ class TbDownloader
   end
 end
 
+class Post
+  def initialize(post_data)
+    @data = post_data
+  end
+
+  def type
+    @data["type"].to_sym
+  end
+
+  def date
+    DateTime.parse(@data["date"])
+  end
+
+  def save
+    # photo,videoはhrefから個別ファイルとして保存
+    # その他はとりあえずjsonのままで
+    case type
+    when :photo
+
+    when :video
+
+    when :link,:text,:quote
+
+    end
+
+  end
+end
+
 
 class Posts
   include Enumerable
@@ -36,8 +64,8 @@ class Posts
     loop do
       posts_20 = @client.posts(tumblr_host,offset: offset)["posts"]
       break if posts_20.empty?
-      posts_20.each do |post|
-        yield post
+      posts_20.each do |postdata|
+        yield Post.new(postdata)
       end
       offset += 20
     end
