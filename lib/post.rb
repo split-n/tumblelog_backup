@@ -16,6 +16,10 @@ class Post
     @data["id"]
   end
 
+  def extension
+    File.extname(detect_larger_image_urls.first)
+  end
+
   def save(store_obj)
     # photo,videoはhrefから個別ファイルとして保存
     # その他はとりあえずjsonのままで
