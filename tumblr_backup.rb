@@ -15,7 +15,12 @@ OptionParser.new do |parser|
 end
 
 unless options[:account]
-  $stderr.puts "invalid arguements"
+  $stderr.puts <<-'EOF'
+  invalid arguements.
+
+  usage: ./tumblr_backup.rb -a ***
+  *** is your account name or your tumblelog domain.
+  EOF
   exit(1)
 end
 Account = options[:account]
@@ -33,11 +38,15 @@ config = tmp.each_with_object({}){|(k,v),obj| obj[k.to_sym] = v}
 tl = Tumblelog.new(options[:account],config)
 
 posts = tl.each_post.take(20)
-store = SaveStore.new(options[:account])
+save_dir = File.expand_path(File.dirname(__FILE__)) + "/save/#{options[:accounnt]}/"
+store = SaveStore.new(save_dir)
 
 posts.each do |post|
   post.save(store)
 end
+
+
+binding.pry
 
 
 
