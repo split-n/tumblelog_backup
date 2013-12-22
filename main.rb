@@ -30,5 +30,14 @@ config_file_path = File.expand_path(File.dirname(__FILE__)) + "/apikey.yml"
 tmp = YAML.load_file(config_file_path)
 config = tmp.each_with_object({}){|(k,v),obj| obj[k.to_sym] = v} 
 
+tl = Tumblelog.new(options[:account],config)
+
+posts = tl.each_post.take(20)
+store = SaveStore.new(options[:account])
+
+posts.each do |post|
+  post.save(store)
+end
+
 
 

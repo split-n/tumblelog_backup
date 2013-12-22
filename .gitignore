@@ -3,3 +3,5 @@ Gemfile.lock
 *.swp
 vendor/
 .bundle/
+
+save/
