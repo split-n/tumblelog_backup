@@ -1,34 +1,3 @@
-# encoding:utf-8
-
-class Post
-  def initialize(post_data)
-    @data = post_data
-  end
-
-  def type
-    @data["type"].to_sym
-  end
-
-  def date
-    DateTime.parse(@data["date"])
-  end
-
-  def save(store_obj)
-    # photo,videoはhrefから個別ファイルとして保存
-    # その他はとりあえずjsonのままで
-    case type
-    when :photo
-
-    when :video
-
-    when :link,:text,:quote
-
-    end
-
-  end
-end
-
-
 class Tumblelog
   include Enumerable
 
@@ -72,24 +41,6 @@ class Tumblelog
       end
     end
 
-  end
-
-end
-
-
-class SaveStore
-  def initialize(host)
-    @save_dir = ""./#{host}/"
-    FileUtils.mkdir_p("#{@save_dir}json/")
-  end
-
-  def save_quote(json)
-
-  end
-
-  def save_photo(json)
-    dir = "#{@save_dir}image/"
-    FileUtils.mkdir_p(dir)
   end
 
 end

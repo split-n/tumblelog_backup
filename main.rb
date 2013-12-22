@@ -2,7 +2,9 @@
 require 'bundler'
 require 'optparse'
 require 'yaml'
-require_relative 'app/downloader'
+require_relative 'lib/post'
+require_relative 'lib/save_store'
+require_relative 'lib/tumblelog'
 
 
 options = {}
