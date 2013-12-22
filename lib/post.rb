@@ -1,3 +1,4 @@
+# encoding:utf-8
 class Post
   def initialize(post_data)
     @data = post_data
