@@ -26,7 +26,8 @@ else
   Bundler.require
 end
 
-tmp = YAML.load_file("apikey.yml")
+config_file_path = File.expand_path(File.dirname(__FILE__)) + "/apikey.yml"
+tmp = YAML.load_file(config_file_path)
 config = tmp.each_with_object({}){|(k,v),obj| obj[k.to_sym] = v} 
 
 
