@@ -1,3 +1,4 @@
+#!/usr/bin/env ruby
 # encoding:utf-8
 require 'bundler'
 require 'optparse'
@@ -37,16 +38,15 @@ config = tmp.each_with_object({}){|(k,v),obj| obj[k.to_sym] = v}
 
 tl = Tumblelog.new(options[:account],config)
 
-posts = tl.each_post.take(20)
+posts = tl.each_post
 save_dir = File.expand_path(File.dirname(__FILE__)) + "/save/#{options[:accounnt]}/"
 store = SaveStore.new(save_dir)
 
 posts.each do |post|
   post.save(store)
+  puts "download #{post.id}"
 end
 
-
-binding.pry
 
 
 

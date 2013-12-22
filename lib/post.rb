@@ -12,6 +12,10 @@ class Post
     DateTime.parse(@data["date"])
   end
 
+  def id
+    @data["id"]
+  end
+
   def save(store_obj)
     # photo,videoはhrefから個別ファイルとして保存
     # その他はとりあえずjsonのままで
