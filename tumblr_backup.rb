@@ -39,7 +39,7 @@ config = tmp.each_with_object({}){|(k,v),obj| obj[k.to_sym] = v}
 tl = Tumblelog.new(options[:account],config)
 
 posts = tl.each_post
-save_dir = File.expand_path(File.dirname(__FILE__)) + "/save/#{options[:accounnt]}/"
+save_dir = File.expand_path(File.dirname(__FILE__)) + "/save/#{options[:account]}/"
 store = SaveStore.new(save_dir)
 
 posts.each do |post|
