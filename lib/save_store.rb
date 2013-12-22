@@ -1,9 +1,11 @@
 # encoding:utf-8
 require 'open-uri'
 class SaveStore
-  def initialize(host)
-    @save_dir = File.expand_path(File.dirname($0)) + "/save/#{host}/"
+  def initialize(save_dir)
+    @save_dir =  save_dir
+    @save_dir.concat('/') unless @save_dir.end_with?('/')
     FileUtils.mkdir_p("#{@save_dir}json/")
+    FileUtils.mkdir_p("#{@save_dir}image/")
   end
 
   def save_json(hash,filename_without_extension)
@@ -16,9 +18,6 @@ class SaveStore
   end
 
   def save_photo(image_urls,filename_without_extension)
-    dir = "#{@save_dir}image/"
-    FileUtils.mkdir_p(dir)
-    
     largest_img_url = image_urls.find {|image_url|
       result = try_open_url(image_url)
       next false unless result
@@ -31,15 +30,13 @@ class SaveStore
     image = open(largest_img_url).read
 
 
-    File.binwrite("#{dir}#{filename_without_extension}#{extension}",image)
+    File.binwrite("#{@save_dir}image/#{filename_without_extension}#{extension}",image)
 
     
   end
 
   def try_open_url(url)
-    res = open(url)
-    res
-
+    open(url)
   rescue
     return false
   end
