@@ -4,15 +4,14 @@ class PostFactory
   # text, quote, link, answer, video, audio, photo, chat
   def self.create(hash)
     type = hash["type"].to_sym
-    case type
+    return case type
     when :photo
-      return PhotoPost.new(hash)
+      PhotoPost.new(hash)
     when :quote
-      return QuotePost.new(hash)
+      uotePost.new(hash)
     else
-      return OtherPost.new(hash)
+      nil
     end
-
 
   end
 

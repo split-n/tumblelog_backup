@@ -9,8 +9,8 @@ class SaveStore
   end
 
   def save_json(hash,filename_without_extension)
-    
-
+    json = JSON.generate(hash)
+    File.write("#{@save_dir}json/#{filename_without_extension}.json",json)
   end
 
   def save_quote(hash)

@@ -13,7 +13,7 @@ class Post
   end
 
   def id
-    @data["id"].dup
+    @data["id"]
   end
 
   def save(store_obj)

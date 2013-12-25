@@ -1,7 +1,8 @@
 # encoding:utf-8
-class ImagePost < Post
-  def save
+class PhotoPost < Post
+  def save(store_obj)
     store_obj.save_photo(detect_larger_image_urls,id)
+    store_obj.save_json(@data,id)
   end
 
   def extension
