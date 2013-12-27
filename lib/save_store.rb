@@ -9,8 +9,8 @@ class SaveStore
   end
 
   def save_json(hash,filename_without_extension)
-    
-
+    json = JSON.generate(hash)
+    File.write("#{@save_dir}json/#{filename_without_extension}.json",json)
   end
 
   def save_quote(hash)
@@ -18,17 +18,15 @@ class SaveStore
   end
 
   def save_photo(image_urls,filename_without_extension)
-    largest_img_url = image_urls.find {|image_url|
-      result = try_open_url(image_url)
+    image_data = image_urls.lazy.map {|url|
+      result = try_open_url(url)
       next false unless result
       next false if result.size < 1024*2 # less than 2KB
-      true
-    }
+      next [url,result]
+    }.first
 
-    extension = File.extname(largest_img_url)
-
-    image = open(largest_img_url).read
-
+    image = image_data[1]
+    extension = File.extname(image_data[0])
 
     File.binwrite("#{@save_dir}image/#{filename_without_extension}#{extension}",image)
 

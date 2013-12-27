@@ -38,7 +38,8 @@ class Tumblelog
       posts_20 = @client.posts(@tumblr_host,offset: offset)["posts"]
       break if posts_20.nil? || posts_20.empty?
       posts_20.each do |postdata|
-        yield Post.new(postdata)
+        post = PostFactory.create(postdata)
+        yield post if post
       end
     end
 

@@ -1,7 +1,9 @@
-apikey.yml
 Gemfile.lock
-*.swp
 vendor/
 .bundle/
 
 save/
+apikey.yml
+
+*.swp
+.DS_Store
