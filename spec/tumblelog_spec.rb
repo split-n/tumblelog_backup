@@ -44,9 +44,15 @@ describe Tumblelog do
 
     it "全部のpostのクラスが正確" do
       posts = @tumblelog.each_post.to_a
-      posts.sort_by!{|post| post.date }
-      expect(posts[0]).to be_instance_of AnswerPost
-      expect(posts[1]).to be_instance_of VideoPost
+      posts.sort_by!{|post| post.date } # older to newer
+      expect(posts[0]).to be_instance_of TextPost
+      expect(posts[1]).to be_instance_of PhotoPost
+      expect(posts[2]).to be_instance_of QuotePost
+      expect(posts[3]).to be_instance_of LinkPost
+      expect(posts[4]).to be_instance_of ChatPost
+      expect(posts[5]).to be_instance_of AudioPost
+      expect(posts[6]).to be_instance_of VideoPost
+      expect(posts[7]).to be_instance_of AnswerPost
     end
   end
 end
