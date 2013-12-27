@@ -38,8 +38,13 @@ describe Tumblelog do
     end
 
     it "range指定がうまくいく" do
-      posts = @tumblelog.each_post_ranged(5,Float::INFINITY).to_a
-      expect(posts.count).to eq POSTS_COUNT - 5
+      posts_from = 5
+      ranged_posts = @tumblelog.each_post_ranged(posts_from,Float::INFINITY).to_a
+      cut_posts = @tumblelog.each_post.to_a[posts_from..-1]
+      expect(
+        ranged_posts.zip(cut_posts).any?{|pair|
+          pair[0].id != pair[1].id } 
+      ).to be_false
     end
 
     it "全部のpostのクラスが正確" do
