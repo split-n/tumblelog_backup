@@ -5,7 +5,7 @@ class SaveStore
     @save_dir =  save_dir
     @save_dir.concat('/') unless @save_dir.end_with?('/')
     FileUtils.mkdir_p("#{@save_dir}json/")
-    FileUtils.mkdir_p("#{@save_dir}image/")
+    FileUtils.mkdir_p("#{@save_dir}photo/")
   end
 
   def save_json(hash,filename_without_extension)
@@ -28,7 +28,7 @@ class SaveStore
     image = image_data[1]
     extension = File.extname(image_data[0])
 
-    File.binwrite("#{@save_dir}image/#{filename_without_extension}#{extension}",image)
+    File.binwrite("#{@save_dir}photo/#{filename_without_extension}#{extension}",image)
 
     
   end
