@@ -43,7 +43,7 @@ class SaveStore
 
 
 
-    image = image_data[1]
+    image = image_data[1].read
     extension = File.extname(image_data[0])
 
     File.binwrite("#{@save_dir}photo/#{filename_without_extension}#{extension}",image)
