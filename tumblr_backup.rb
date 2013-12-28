@@ -41,8 +41,12 @@ save_dir = File.expand_path(File.dirname(__FILE__)) + "/save/#{options[:account]
 store = SaveStore.new(save_dir)
 
 posts.each do |post|
-  post.save(store)
-  puts "download #{post.id}"
+  begin
+    post.save(store)
+    puts "download #{post.id}"
+  rescue SaveFailedError
+    puts "save failed: #{post.id}"
+  end
 end
 
 
