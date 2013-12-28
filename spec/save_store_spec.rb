@@ -14,6 +14,11 @@ describe SaveStore do
 
       expect_path = "#{tmpdir}photo/test.jpg"
       expect(File.exist?(expect_path)).to be_true
+
+      expect_data = File.binread('./file/lime.jpg')
+      the_data = File.binread(expect_path)
+
+      expect(expect_data).to eq the_data
     end
   end
 
