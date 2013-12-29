@@ -16,15 +16,15 @@ describe SaveStore do
     end
 
     it "画像を保存できている" do
-      expect_photo_path = "#{tmpdir}/photo/json/#{@photo_post.id}.png"
-      stored_photo = File.binread(expect_photo_path)
+      test_photo_path = "#{tmpdir}/photo/json/#{@photo_post.id}.png"
+      test_photo = File.binread(test_photo_path)
       prepared_photo = File.binread('./file/lenna.png')
-      expect(stored_photo).to eq prepared_photo
+      expect(test_photo).to eq prepared_photo
     end
 
     it "jsonを保存できている" do
-      expect_json_path =  "#{tmpdir}/photo/json/#{@photo_post.id}.json"
-      stored_json_file = File.read(expect_json_path)
+      test_json_path =  "#{tmpdir}/photo/json/#{@photo_post.id}.json"
+      stored_json_file = File.read(test_json_path)
       the_data = JSON.load(stored_json)
       expect(the_data).to eq @data
     end

@@ -38,10 +38,14 @@ describe PhotoPost do
     end
 
     it "#imageが最大の画像ファイルを返す" do
-      got_image_file = photo.image
-      expect(got_image_file).to be_a_kind_of File
-      expected_image = File.binread('./file/photo_post.json')
+      got_image_file = photo_post.photo
+      expected_image = File.binread('./file/lenna.png')
       expect(got_image_file.read).to eq expected_image
+    end
+
+    it "#jsonが同じデータを返す" do
+      json = photo_post.json
+      expect(JSON.load(json)).to eq data
     end
 
   end
