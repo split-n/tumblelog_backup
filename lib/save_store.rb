@@ -7,25 +7,6 @@ class SaveFailedError < RuntimeError ; end
 
 
 class SaveStore
-  Save_each_obj_type = [:photo,:video,:audio]
-  class SaveDir
-    def initialize(root)
-      @root_dir = File.expand_path(root)
-
-    end
-
-    def for_data(type)
-      if Save_each_obj_type.include? type
-        "#{@root_dir}/#{type}/#{type}"
-      else 
-        nil
-      end
-    end
-    
-    def for_json(type)
-      "#{@root_dir}/#{type}/json"
-    end
-  end
 
   def initialize(save_root_dir)
     @save_root_dir =  File.expand_path(save_root_dir)
@@ -33,12 +14,9 @@ class SaveStore
   end
 
   def create_save_root_dirs
-    SaveStore.TYPES.each do |type|
-      root_for_type = "#{@save_root_dir}#{type}/"
-      if Save_each_obj_type.include? type
-        FileUtils.mkdir_p("#{root_for_type}#{type}/")
-      end
-      FileUtils.mkdir_p("#{root_for_type}json/")
+    FileUtils.mkdir_p("#{@save_root_dir}json/")
+    PostFactory::TYPES.each do |type|
+      FileUtils.mkdir_p("#{@save_root_dir}#{type}/")
     end
   end
 
