@@ -25,22 +25,20 @@ class SaveStore
     when PhotoPost
       save_photo(post)
     end
+    save_json(post)
   end
 
-
   private
-
-  def save_json(hash,filename_without_extension)
-    json = JSON.generate(hash)
-    File.write("#{@save_root_dir}json/#{filename_without_extension}.json",json)
+  def save_json(post)
+    File.write("#{@save_root_dir}json/#{filename_without_extension}.json",post.json)
   end
 
   def save_quote(hash)
-
   end
 
   def save_photo(post)
-
+    filename = "#{post.id}#{post.extension}"
+    File.write("#{@save_root_dir}photo/#{filename}",post.photo)
   end
 
 end
