@@ -2,6 +2,7 @@
 class Post
   def initialize(post_data)
     @data = post_data
+    raise unless @data["id"]
   end
 
   def type
