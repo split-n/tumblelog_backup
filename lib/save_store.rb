@@ -11,6 +11,7 @@ class SaveStore
   def initialize(save_root_dir)
     @save_root_dir =  File.expand_path(save_root_dir)
     @save_root_dir.concat('/') unless @save_root_dir.end_with?('/')
+    create_save_root_dirs
   end
 
   def create_save_root_dirs
@@ -30,7 +31,7 @@ class SaveStore
 
   private
   def save_json(post)
-    File.write("#{@save_root_dir}json/#{filename_without_extension}.json",post.json)
+    File.write("#{@save_root_dir}json/#{post.id}.json",post.json)
   end
 
   def save_quote(hash)
@@ -38,7 +39,7 @@ class SaveStore
 
   def save_photo(post)
     filename = "#{post.id}#{post.extension}"
-    File.write("#{@save_root_dir}photo/#{filename}",post.photo)
+    File.binwrite("#{@save_root_dir}photo/#{filename}",post.photo.read)
   end
 
 end
