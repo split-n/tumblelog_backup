@@ -20,4 +20,8 @@ class Post
     raise NotImplementedError
   end
 
+  def json
+    JSON.generate(@data)
+  end
+
 end

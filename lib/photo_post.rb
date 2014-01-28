@@ -8,9 +8,6 @@ class PhotoPost < Post
     image_data[1]
   end
 
-  def json
-    JSON.generate(@data)
-  end
 
   private
 
