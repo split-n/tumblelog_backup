@@ -42,7 +42,7 @@ store = SaveStore.new(save_dir)
 
 posts.each do |post|
   begin
-    post.save(store)
+    store.save(post)
     puts "download #{post.id}"
   rescue SaveFailedError
     puts "save failed: #{post.id}"
