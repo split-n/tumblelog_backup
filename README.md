@@ -2,6 +2,7 @@
 
 TumblrのTumblelogをバックアップできるツール(予定)  
 現状画像だけダウンロードできます
+その他はJSONファイルをダウンロードします
 
 ### how to use
 `$ git clone https://github.com/split-n/tumblelog_backup `
@@ -10,5 +11,5 @@ TumblrのTumblelogをバックアップできるツール(予定)
 apikey.yml.sampleにそれぞれ書き込み、apikey.ymlとして保存
 
 `$ bundle install --path vendor/bundle`  
-`$ ruby main.rb -a your_account_name_or_domain`
+`$ ruby tumblr_backup.rb -a your_account_name_or_domain`
 
