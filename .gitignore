@@ -6,4 +6,5 @@ save/
 apikey.yml
 
 *.swp
+*.swo
 .DS_Store
