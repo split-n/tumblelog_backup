@@ -4,8 +4,6 @@ require_relative './loader'
 
 class SaveFailedError < RuntimeError ; end
 
-
-
 class SaveStore
 
   def initialize(save_root_dir)
@@ -32,9 +30,6 @@ class SaveStore
   private
   def save_json(post)
     File.write("#{@save_root_dir}json/#{post.id}.json",post.json)
-  end
-
-  def save_quote(hash)
   end
 
   def save_photo(post)
