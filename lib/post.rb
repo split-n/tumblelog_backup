@@ -2,6 +2,7 @@
 class Post
   def initialize(post_data)
     @data = post_data
+    raise unless @data["id"]
   end
 
   def type
@@ -18,6 +19,10 @@ class Post
 
   def save(store_obj)
     raise NotImplementedError
+  end
+
+  def json
+    JSON.generate(@data)
   end
 
 end

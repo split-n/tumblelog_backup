@@ -1,7 +1,6 @@
 # encoding:utf-8
 class PostFactory
-  # all of types : 
-  # text, quote, link, answer, video, audio, photo, chat
+  TYPES = %w(text quote link answer video audio photo chat).map(&:to_sym)
   def self.create(hash)
     type = hash["type"].to_sym
     return case type

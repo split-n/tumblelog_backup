@@ -1,22 +1,35 @@
 # encoding:utf-8
 class PhotoPost < Post
-  def save(store_obj)
-    store_obj.save_photo(detect_larger_image_urls,id)
-    store_obj.save_json(@data,id)
+  def extension
+    File.extname(image_data[0])
   end
 
-  def extension
-    File.extname(detect_larger_image_urls.first)
+  def photo
+    image_data[1]
   end
+
 
   private
-  def detect_larger_image_urls
-    # 良質なものから順に配列で複数urlを返す
-    # urlがあっても取得できない場合があるので
+
+  # should use this method instead of @image_data 
+  # struct : [url,File]
+  def image_data
+    unless @image_data
+      @image_data = image_urls.lazy.map {|url|
+        result = try_open_url(url)
+        next false unless result
+        next [url,result]
+      }.first
+    end
+    return @image_data
+  end
+
+  # sorted by image size desc
+  def image_urls
     photos = @data["photos"][0]
     original_size = photos["original_size"]
     alt_sizes = photos["alt_sizes"]
-    alt_maxes = alt_sizes.sort_by{|img| -(img["width"] * img["height"]) }.take(2)
+    alt_maxes = alt_sizes.sort_by{|img| -(img["width"] * img["height"]) }
 
     images = []
     images << original_size["url"] if original_size
@@ -24,5 +37,12 @@ class PhotoPost < Post
 
     images
   end
+
+  def try_open_url(url)
+    open(url)
+  rescue
+    return false
+  end
+
 end
 
