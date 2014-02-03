@@ -9,7 +9,7 @@ describe PhotoPost do
   end
 
   let(:data)  {
-    json_file = File.read('./file/photo_post.json')
+    json_file = File.read("#{__dir__}/file/photo_post.json")
     JSON.load(json_file)
   }
 
@@ -39,7 +39,7 @@ describe PhotoPost do
 
     it "#imageが最大の画像ファイルを返す" do
       got_image_file = photo_post.photo
-      expected_image = File.binread('./file/lenna.png')
+      expected_image = File.binread("#{__dir__}/file/lenna.png")
       expect(got_image_file.read).to eq expected_image
     end
 

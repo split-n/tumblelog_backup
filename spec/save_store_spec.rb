@@ -7,7 +7,7 @@ Bundler.require
 describe SaveStore do
   context "PhotoPostを保存できる" do
     before :all do
-      @json = File.read('./file/photo_post.json')
+      @json = File.read("#{__dir__}/file/photo_post.json")
       @data = JSON.load(@json)
       @photo_post = PhotoPost.new(@data)
       @tmpdir = Dir.mktmpdir
@@ -18,7 +18,7 @@ describe SaveStore do
     it "画像を保存できている" do
       test_photo_path = "#{@tmpdir}/photo/#{@photo_post.id}#{@photo_post.extension}"
       test_photo = File.binread(test_photo_path)
-      prepared_photo = File.binread('./file/photo_post.jpg')
+      prepared_photo = File.binread("#{__dir__}/file/photo_post.jpg")
       expect(test_photo.size).to eq prepared_photo.size
     end
 
