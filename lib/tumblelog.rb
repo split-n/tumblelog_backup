@@ -14,15 +14,12 @@ class Tumblelog
   end
 
 
-  def each_post
+  def each_post(&block)
     unless block_given?
-      return self.to_enum(:each_post)
+      return self.to_enum(:each_post_ranged)
     end
 
-    each_post_ranged do |post|
-      yield post
-    end
-
+    each_post_ranged &block
   end
 
   def each_post_ranged(from=0,to=Float::INFINITY)
@@ -42,7 +39,6 @@ class Tumblelog
         yield post if post
       end
     end
-
   end
 
 end
