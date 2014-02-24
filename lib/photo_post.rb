@@ -11,15 +11,14 @@ class PhotoPost < Post
 
   private
 
-  # should use this method instead of @image_data 
+  # should use this method instead of @image_data
   # struct : [url,File]
   def image_data
     unless @image_data
       @image_data = image_urls.lazy.map {|url|
         result = try_open_url(url)
-        next false unless result
-        next [url,result]
-      }.first
+        result ? [url,result] : nil
+      }.reject(&:nil?).first
     end
     return @image_data
   end
@@ -33,7 +32,7 @@ class PhotoPost < Post
 
     images = []
     images << original_size["url"] if original_size
-    images.concat(alt_maxes.map{|p| p["url"] } ) 
+    images.concat(alt_maxes.map{|p| p["url"] } )
 
     images
   end
