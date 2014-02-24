@@ -17,10 +17,6 @@ class Post
     @data["id"]
   end
 
-  def save(store_obj)
-    raise NotImplementedError
-  end
-
   def json
     JSON.generate(@data)
   end
