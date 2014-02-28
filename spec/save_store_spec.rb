@@ -11,7 +11,7 @@ describe SaveStore do
       @data = JSON.load(@json)
       @photo_post = PhotoPost.new(@data)
       @tmpdir = Dir.mktmpdir
-      store = SaveStore.new(@tmpdir)
+      store = SaveStore.new(save_root_dir:@tmpdir,split_json_dir:false)
       store.save(@photo_post)
     end
 
