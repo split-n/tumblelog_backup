@@ -60,7 +60,8 @@ describe Tumblelog do
       expect(posts[7]).to be_instance_of AnswerPost
     end
 
-    context "misc" do it "のeach_postへブロックを渡した結果が渡さない結果と同様" do
+    context "misc" do 
+      it "のeach_postへブロックを渡した結果が渡さない結果と同様" do
         posts_id = []
         @tumblelog.each_post do |post|
           posts_id << post.id
