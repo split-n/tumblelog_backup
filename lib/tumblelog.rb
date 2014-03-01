@@ -18,18 +18,11 @@ class Tumblelog
     @blog_info["posts"]
   end
 
-  def each_post(&block)
-    unless block_given?
-      return self.to_enum(:each_post_ranged)
-    end
 
-    each_post_ranged &block
-  end
-
-  def each_post_ranged(from=0,to=Float::INFINITY)
+  def each_post(from=0,to=Float::INFINITY)
     #  標準の引数の場合、eachと同等の動作をする
     unless block_given?
-      return self.to_enum(:each_post_ranged,from,to)
+      return self.to_enum(:each_post,from,to)
     end
 
     from.step(to,20) do |offset|

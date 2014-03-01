@@ -47,7 +47,7 @@ describe Tumblelog do
 
     it "range指定がうまくいく" do
       posts_from = 5
-      ranged_posts = @tumblelog.each_post_ranged(posts_from,Float::INFINITY).to_a
+      ranged_posts = @tumblelog.each_post(posts_from,Float::INFINITY).to_a
       cut_posts = @tumblelog.each_post.to_a[posts_from..-1]
       expect(
         ranged_posts.zip(cut_posts).any?{|pair|
