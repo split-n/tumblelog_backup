@@ -29,7 +29,7 @@ describe SaveDirectory do
       expect(Dir.exist? expect_dir).to be_true
     end
 
-    it "分離されていないcontentフォルダを取得できる" do
+    it "分離されていないjsonフォルダを取得できる" do
       dir = SaveDirectory.new(save_root_path:@save_root_path,each_folder_json:false)
       expect_dir = @save_root_path + '/json'
       expect(dir.for_json[:photo]).to eq expect_dir
