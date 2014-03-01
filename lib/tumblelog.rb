@@ -10,8 +10,12 @@ class Tumblelog
     if blog_info["status"] == 404
       raise ArgumentError.new("Invalid Hostname")
     else
-      @blog_info = blog_info
+      @blog_info = blog_info["blog"]
     end
+  end
+
+  def post_count
+    @blog_info["posts"]
   end
 
   def each_post(&block)

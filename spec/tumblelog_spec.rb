@@ -36,6 +36,10 @@ describe Tumblelog do
       expect(@tumblelog.each_post.count).to eq POSTS_COUNT
     end
 
+    it "#post_count" do
+      expect(@tumblelog.post_count).to eq POSTS_COUNT
+    end
+
     it "画像が1個" do
       photos = @tumblelog.each_post.select{|p| p.type == :photo}
       expect(photos.count).to eq 1
