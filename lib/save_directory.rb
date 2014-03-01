@@ -12,31 +12,41 @@ class SaveDirectory
 
   private
   def create_dirs
-    @for_content = {}
-    @for_json = {}
+    for_content = {}
+    for_json = {}
     if @json_split
       PostFactory::TYPES.each do |type|
         cp = File.join(@root,type.to_s + '/' + type.to_s)
-        FileUtils.mkdir_p(cp)
-        @for_content[type] = cp.freeze
+        for_content[type] = cp.freeze
 
         jp = File.join(@root,type.to_s + '/json')
-        FileUtils.mkdir_p(jp)
-        @for_json[type] = jp.freeze
+        for_json[type] = jp.freeze
       end
     else
       jp = File.join(@root, 'json')
       FileUtils.mkdir_p(jp)
       PostFactory::TYPES.each do |type|
         cp = File.join(@root, type.to_s)
-        FileUtils.mkdir_p(cp)
-        @for_content[type] = cp.freeze
-        @for_json[type] = jp.freeze
+        for_content[type] = cp.freeze
+        for_json[type] = jp.freeze
       end
     end
-    @for_content.freeze
-    @for_json.freeze
+
+    @for_content = Directories.new(for_content)
+    @for_json = Directories.new(for_json)
   end
 
+  class Directories
+    def initialize(hash)
+      @data = hash
+    end
+
+    def [](key)
+      dir = @data[key]
+      raise unless dir
+      FileUtils.mkdir_p(dir)
+      dir
+    end
+  end
 
 end
