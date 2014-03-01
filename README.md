@@ -11,5 +11,5 @@ TumblrのTumblelogをバックアップできるツール(予定)
 apikey.yml.sampleにそれぞれ書き込み、apikey.ymlとして保存
 
 `$ bundle install --path vendor/bundle`  
-`$ ruby tumblr_backup.rb -a your_account_name_or_domain`
+`$ ruby tumblr_backup.rb -a your_account_name_or_domain -s`
 
