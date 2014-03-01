@@ -67,6 +67,15 @@ describe Tumblelog do
       expect(posts[6]).to be_instance_of VideoPost
       expect(posts[7]).to be_instance_of AnswerPost
     end
+
+    it "全部のpostのidが正確" do
+      expect_ids = [71307438418,71307185951,71305811722,
+       71305688040,71303584893,71302197206,
+       71302135845,71302067438
+      ]
+      ids = @tumblelog.each_post.map(&:id)
+      expect(ids).to eq expect_ids
+    end
   end
 
   context "misc" do 
