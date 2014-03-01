@@ -67,19 +67,21 @@ describe Tumblelog do
       expect(posts[6]).to be_instance_of VideoPost
       expect(posts[7]).to be_instance_of AnswerPost
     end
+  end
 
-    context "misc" do 
-      it "のeach_postへブロックを渡した結果が渡さない結果と同様" do
-        posts_id = []
-        @tumblelog.each_post do |post|
-          posts_id << post.id
-        end
-
-        expect(posts_id).to eq @tumblelog.each_post.to_a.map(&:id)
-      end
-
+  context "misc" do 
+    before :all do
+      @testumr = Tumblelog.new("testumr",@config)
     end
 
+    it "のeach_postへブロックを渡した結果が渡さない結果と同様" do
+      posts_id = []
+      @testumr.each_post do |post|
+        posts_id << post.id
+      end
+
+      expect(posts_id).to eq @testumr.each_post.to_a.map(&:id)
+    end
   end
 
 end
