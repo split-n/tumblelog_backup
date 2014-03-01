@@ -1,9 +1,10 @@
 # encoding:utf-8
 class Tumblelog
-  include Enumerable
+  attr_reader :tumblr_host
 
   def initialize(tumblr_host,oauth_config)
-    @tumblr_host = tumblr_host
+    # ユーザー名のみを指定された場合でも、tumblrのFQDNに正規化する
+    @tumblr_host = tumblr_host.include?(".") ? tumblr_host : "#{tumblr_host}.tumblr.com"
     @client = Tumblr::Client.new(oauth_config)
     blog_info = @client.blog_info(@tumblr_host)
     if blog_info["status"] == 404
@@ -12,7 +13,6 @@ class Tumblelog
       @blog_info = blog_info
     end
   end
-
 
   def each_post(&block)
     unless block_given?

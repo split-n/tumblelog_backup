@@ -28,6 +28,10 @@ describe Tumblelog do
       @tumblelog = Tumblelog.new("testumr",@config)
     end
 
+    it "host名を取得できる" do
+      expect(@tumblelog.tumblr_host).to eq "testumr.tumblr.com"
+    end
+
     it "post数のカウントが正確" do
       expect(@tumblelog.each_post.count).to eq POSTS_COUNT
     end
