@@ -3,13 +3,13 @@
   "photos": [
     {
       "original_size": {
-        "url": "http://25.media.tumblr.com/d13c0f2b13a60290d0de46d3a9831cc0/tumblr_mygtrnoAae1tneva6o1_400.jpg",
+          "url": "http://exampleeeeeeexa.com/null/null.jpg",
         "height": 256,
         "width": 256
       },
       "alt_sizes": [
         {
-          "url": "http://25.media.tumblr.com/d13c0f2b13a60290d0de46d3a9831cc0/tumblr_mygtrnoAae1tneva6o1_400.jpg",
+          "url": "http://example.com/null.jpg",
           "height": 256,
           "width": 256
         },

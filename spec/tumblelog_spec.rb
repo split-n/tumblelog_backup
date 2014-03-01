@@ -6,7 +6,7 @@ Bundler.require
 
 describe Tumblelog do
   before :all do
-    config_file_path = File.expand_path(File.dirname(__FILE__)) + "/apikey.yml"
+    config_file_path = "#{__dir__}/apikey.yml"
     tmp = YAML.load_file(config_file_path)
     @config = tmp.each_with_object({}){|(k,v),obj| obj[k.to_sym] = v} 
   end
@@ -59,6 +59,20 @@ describe Tumblelog do
       expect(posts[6]).to be_instance_of VideoPost
       expect(posts[7]).to be_instance_of AnswerPost
     end
+
+    context "misc" do 
+      it "のeach_postへブロックを渡した結果が渡さない結果と同様" do
+        posts_id = []
+        @tumblelog.each_post do |post|
+          posts_id << post.id
+        end
+
+        expect(posts_id).to eq @tumblelog.each_post.to_a.map(&:id)
+      end
+
+    end
+
   end
+
 end
 

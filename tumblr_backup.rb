@@ -10,19 +10,10 @@ options = {}
 OptionParser.new do |parser|
   parser.on('-d','--development') {options[:development] = true }
   parser.on('-a','--account ACCOUNT') {|v| options[:account] = v }
+  parser.on('-o','--output DEST_DIR') {|v| options[:dest_dir] = v }
+  parser.on('-s','--split-json') {options[:split_json] = true }
   parser.parse!(ARGV)
 end
-
-unless options[:account]
-  $stderr.puts <<-'EOF'
-  invalid arguements.
-
-  usage: ./tumblr_backup.rb -a ***
-  *** is your account name or your tumblelog domain.
-  EOF
-  exit(1)
-end
-Account = options[:account]
 
 if options[:development]
   Bundler.require(:default,:development)
@@ -30,17 +21,38 @@ else
   Bundler.require
 end
 
+unless options[:account]
+  warn <<-'EOF'
+  invalid arguements.
+
+  usage: ./tumblr_backup.rb -a YOUR_ACCOUNT_OR_DOMAIN [-o OUTPUT_DIR] [-s ]
+  Options in [ ] is optional.
+  -s to split json saving folder.
+  Files is being saved to __dir__/save/ unless -o option
+  EOF
+  exit(1)
+end
+
 config_file_path = File.expand_path(File.dirname(__FILE__)) + "/apikey.yml"
-tmp = YAML.load_file(config_file_path)
-config = tmp.each_with_object({}){|(k,v),obj| obj[k.to_sym] = v} 
+begin
+  tmp = YAML.load_file(config_file_path)
+rescue
+  warn <<-'EOF'
+  apikey.yml is missing . 
+  please read README.md .
+  EOF
+  exit(1)
+end
+config = tmp.each_with_object({}){|(k,v),obj| obj[k.to_sym] = v}
 
 tl = Tumblelog.new(options[:account],config)
 
-posts = tl.each_post
-save_dir = File.expand_path(File.dirname(__FILE__)) + "/save/#{options[:account]}/"
-store = SaveStore.new(save_dir)
+save_dir = options[:dest_dir] || File.expand_path(__dir__) + "/save/#{options[:account]}/"
+store = SaveStore.new(save_root_dir:save_dir,split_json_dir:!!options[:split_json])
 
-posts.each do |post|
+p options
+
+tl.each_post do |post|
   begin
     store.save(post)
     puts "download #{post.id}"

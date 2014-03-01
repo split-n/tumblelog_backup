@@ -5,7 +5,7 @@ Bundler.require
 
 describe PostFactory do
   it "PhotoならPhotoPostのインスタンスを生成する" do
-    json = File.read('./file/photo_post.json')
+    json = File.read("#{__dir__}/file/photo_post.json")
     hash = JSON.load(json)
 
     instance = PostFactory.create(hash)

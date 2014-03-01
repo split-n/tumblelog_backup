@@ -2,6 +2,13 @@
 
 
 class TextPost < Post
+  def title
+    @data["title"]
+  end
+
+  def body
+    @data["body"]
+  end
 end
 
 class QuotePost < Post
