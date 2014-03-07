@@ -12,6 +12,22 @@ describe ResumableTumblelog do
   end
 
   context "a" do
+    def resume_each_times(cases)
+      # [3,4] => get 3posts and get 4posts
+      resm = []
+      state = nil
+      cases.each do |i|
+        if state
+          resumable = ResumableTumblelog.restore(state,@config)
+        else
+          resumable = ResumableTumblelog.new("staff",@config)
+        end
+        resm.concat resumable.each_post.lazy.map(&:id).take(i).to_a
+        state = resumable.save_state
+      end
+      resm
+    end
+
     before :all do
       @original = Tumblelog.new("staff",@config)
     end
@@ -20,20 +36,21 @@ describe ResumableTumblelog do
       resumable = ResumableTumblelog.new("staff",@config)
 
       orig = @original.each_post.lazy.map(&:id).take(21).to_a
-      resm = resumable.each_post.lazy.map(&:id).take(21).to_a
+      resm = resume_each_times([21])
       expect(resm).to eq orig
     end
 
-    it "get3, resume, get3" do
-      resumable = ResumableTumblelog.new("staff",@config)
-      orig = @original.each_post.lazy.map(&:id).take(6).to_a
+    it "get3, get3" do
+      times = [3,3]
+      orig = @original.each_post.lazy.map(&:id).take(times.inject(&:+)).to_a
+      resm = resume_each_times(times)
+      expect(resm).to eq orig
+    end
 
-      resm = []
-      resm.concat resumable.each_post.lazy.map(&:id).take(3).to_a
-      state = resumable.save_state
-      resumable_2 = ResumableTumblelog.restore(state,@config)
-      resm.concat resumable_2.each_post.lazy.map(&:id).take(3).to_a
-
+    it "get2, get16, get 10" do
+      times = [2,16,10]
+      orig = @original.each_post.lazy.map(&:id).take(times.inject(&:+)).to_a
+      resm = resume_each_times(times)
       expect(resm).to eq orig
     end
   end
