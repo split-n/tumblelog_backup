@@ -10,21 +10,19 @@ class ResumableTumblelog
   end
 
   def self.verify_state(state)
-    items = [:target_account,:last_id,:last_count]
+    items = [:target_account,:last_id,:next_count]
     items.all?{|it| state.has_key?(it) }
   end
 
   def initialize(tumblr_host,oauth_config)
     @base = Tumblelog.new(tumblr_host,oauth_config)
-    @previous_state = {
-      target_account: tumblr_host,
-      last_id: 10**18, # todo fix
-      last_count: 0
-    }
+    @last_id = 10**18 # todo fix
+    @next_count = 0
   end
 
   def load(state) # todo: should not public
-    @previous_state = state
+    @last_id = state[:last_id]
+    @next_count = state[:next_count]
     nil
   end
 
@@ -33,14 +31,14 @@ class ResumableTumblelog
     return self.to_enum(:each_post) unless block_given?
     raise "You cannot rewind enumeration" if @called
     @called = true
-    # 前回のlast_countから再開しても、
+    # 前回のnext_countから再開しても、
     # 投稿が増えてずれている可能性があるため
-    @last_count = @previous_state[:last_count] - 1
-    @base.each_post(@previous_state[:last_count]) do |post|
-      if post.id < @previous_state[:last_id]
-        yield post
+    last_id_prev = @last_id
+    @base.each_post(@next_count) do |post|
+      if post.id < last_id_prev
         @last_id = post.id
-        @last_count += 1
+        @next_count += 1
+        yield post # yield 直後でEnumeratorが止まるので、最後に置く必要がある
       end
     end
   end
@@ -49,7 +47,7 @@ class ResumableTumblelog
     state = {
       target_account: @base.tumblr_host,
       last_id: @last_id,
-      last_count: @last_count
+      next_count: @next_count
     }
     JSON.generate(state)
   end
