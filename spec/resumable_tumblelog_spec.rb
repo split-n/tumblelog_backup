@@ -61,6 +61,70 @@ describe ResumableTumblelog do
       expect(resm).to eq orig
     end
   end
+
+  context "stateファイルのテスト" do
+    let(:expect_ids) { [71307438418,71307185951,71305811722,71305688040,71303584893,71302197206,71302135845,71302067438 ] }
+
+    it "default" do
+      state = {
+        target_account:"testumr.tumblr.com",
+        last_id: 10**16,
+        next_count: 0
+      }
+      resumable = ResumableTumblelog.restore(JSON.generate(state),@config)
+
+      ids = resumable.each_post.map(&:id).to_a
+      expect(ids).to eq expect_ids
+    end
+
+    it "countが増えない状態でrestore" do
+      state = {
+        target_account:"testumr.tumblr.com",
+        last_id: expect_ids[3],
+        next_count: 3
+      }
+      resumable = ResumableTumblelog.restore(JSON.generate(state),@config)
+
+      ids = resumable.each_post.map(&:id).to_a
+      expect(ids).to eq expect_ids[4..-1]
+    end
+
+    it "countが以前より進んでいるケース" do
+      state = {
+        target_account:"testumr.tumblr.com",
+        last_id: expect_ids[3],
+        next_count: 2 # 現在の[3]を1個目のときに取得したという想定、2つ追加されている
+      }
+      resumable = ResumableTumblelog.restore(JSON.generate(state),@config)
+
+      ids = resumable.each_post.map(&:id).to_a
+      expect(ids).to eq expect_ids[4..-1]
+    end
+
+    it "すでに最後まで到達している" do
+      state = {
+        target_account:"testumr.tumblr.com",
+        last_id: expect_ids[7],
+        next_count: 0
+      }
+      resumable = ResumableTumblelog.restore(JSON.generate(state),@config)
+
+      ids = resumable.each_post.map(&:id).to_a
+      expect(ids).to eq []
+    end
+
+    it "countが以前より少ないケース(前にあった投稿が削除された)" do
+      state = {
+        target_account:"testumr.tumblr.com",
+        last_id: expect_ids[2],
+        next_count: 5 #[4]で取得
+      }
+      resumable = ResumableTumblelog.restore(JSON.generate(state),@config)
+
+      ids = resumable.each_post.map(&:id).to_a
+      expect(ids).to eq expect_ids[3..-1]
+    end
+  end
 end
 
 
