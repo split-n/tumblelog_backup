@@ -11,7 +11,7 @@ describe ResumableTumblelog do
     @config = tmp.each_with_object({}){|(k,v),obj| obj[k.to_sym] = v} 
   end
 
-  context "a" do
+  context "ResumeしないTumblelogとの突き合わせ" do
     def resume_each_times(cases)
       # [3,4] => get 3posts and get 4posts
       resm = []
@@ -49,6 +49,13 @@ describe ResumableTumblelog do
 
     it "get2, get16, get 10" do
       times = [2,16,10]
+      orig = @original.each_post.lazy.map(&:id).take(times.inject(&:+)).to_a
+      resm = resume_each_times(times)
+      expect(resm).to eq orig
+    end
+
+    it "get31, get16, get 5" do
+      times = [31,16,5]
       orig = @original.each_post.lazy.map(&:id).take(times.inject(&:+)).to_a
       resm = resume_each_times(times)
       expect(resm).to eq orig
