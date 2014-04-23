@@ -5,8 +5,8 @@ require_relative './loader'
 class SaveFailedError < RuntimeError ; end
 
 class SaveStore
-  def initialize(save_root_dir:,split_json_dir:)
-    @dir = SaveDirectory.new(save_root_path:save_root_dir,each_folder_json:split_json_dir)
+  def initialize(save_root_dir,split_json_dir)
+    @dir = SaveDirectory.new(save_root_dir,split_json_dir)
   end
 
   def save(post)

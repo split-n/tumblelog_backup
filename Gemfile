@@ -1,6 +1,6 @@
 # A sample Gemfile
 source "https://rubygems.org"
-ruby '2.1.1'
+ruby '2.0.0'
 
 group :default do
   gem 'tumblr_client', "~>0.8.2"

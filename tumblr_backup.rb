@@ -48,7 +48,7 @@ config = tmp.each_with_object({}){|(k,v),obj| obj[k.to_sym] = v}
 tl = Tumblelog.new(options[:account],config)
 
 save_dir = options[:dest_dir] || File.expand_path(__dir__) + "/save/#{options[:account]}/"
-store = SaveStore.new(save_root_dir:save_dir,split_json_dir:!!options[:split_json])
+store = SaveStore.new(save_dir,!!options[:split_json])
 
 p options
 
