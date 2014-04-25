@@ -4,7 +4,7 @@ class ResumableTumblelog
   def self.restore(state_json,oauth_config)
     state = JSON.parse(state_json,symbolize_names:true)
     raise "Invalid state file" unless verify_state(state)
-    me = self.new(state[:target_account],oauth_config)
+    me = self.allocate
     me.load(state)
     me
   end
@@ -15,32 +15,22 @@ class ResumableTumblelog
   end
 
   def initialize(tumblr_host,oauth_config)
-    @base = Tumblelog.new(tumblr_host,oauth_config)
-    @last_id = 10**18 # todo fix
-    @next_count = 0
+    @holder = TumblelogHolder.new(tumblr_host,oauth_config)
   end
 
-  def load(state) # todo: should not public
-    @last_id = state[:last_id]
-    @next_count = state[:next_count]
-    nil
+  def load(state)
+    @holder = TumblelogHolder.new(state[:target_account],
+                                  state[:last_id],
+                                  state[:next_count])
+
   end
+
 
   # カウント方法の問題から、each_postは一回のみしか正常に実行できない
   def each_post
     return self.to_enum(:each_post) unless block_given?
     raise "You cannot rewind enumeration" if @called
     @called = true
-    # 前回のnext_countから再開しても、
-    # 投稿が増えてずれている可能性があるため
-    last_id_prev = @last_id
-    @base.each_post(@next_count) do |post|
-      if post.id < last_id_prev
-        @last_id = post.id
-        @next_count += 1
-        yield post # yield 直後でEnumeratorが止まるので、最後に置く必要がある
-      end
-    end
   end
 
   def save_state
@@ -51,6 +41,35 @@ class ResumableTumblelog
     }
     JSON.generate(state)
   end
+
+  class TumblelogHolder
+
+    def initialize(tumblr_host,oauth_config,last_id=nil,next_count=nil)
+      if !last_id || !next_count
+        @base = Tumblelog.new(tumblr_host,oauth_config)
+      else
+
+      end
+    end
+
+    def each_post
+
+    end
+
+    def find_startable_count(tumblr_host,oauth_config,last_id,next_count)
+      base = Tumblelog.new(tumblr_host,oauth_config)
+
+      # 順に進んでいけば元の地点に辿り着ける場合
+      if base.each_post(next_count).first.id >= last_id
+        return 
+
+
+      else
+
+      end
+    end
+
+
 
 end
 
