@@ -31,21 +31,14 @@ class ResumableTumblelog
     return self.to_enum(:each_post) unless block_given?
     raise "You cannot rewind enumeration" if @called
     @called = true
-
+    # 前回のnext_countから再開しても、
+    # 投稿が増えてずれている可能性があるため
     last_id_prev = @last_id
-    start_from = @next_count.zero? ? 0 : @next_count-1
-    ready_for_yield = false
-
     @base.each_post(@next_count) do |post|
-      if post.id >= last_id_prev
-        ready_for_yield = true
-      else
-        if ready_for_yield
-          @last_id = post.id
-          @next_count += 1
-          yield post 
-        # yield 直後でEnumeratorが止まるので、最後に置く必要がある
-        end
+      if post.id < last_id_prev
+        @last_id = post.id
+        @next_count += 1
+        yield post # yield 直後でEnumeratorが止まるので、最後に置く必要がある
       end
     end
   end
