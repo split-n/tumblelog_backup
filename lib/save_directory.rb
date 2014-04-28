@@ -3,7 +3,7 @@ require_relative './loader'
 
 class SaveDirectory
   attr_reader :for_content, :for_json
-  def initialize(save_root_path:,each_folder_json:false)
+  def initialize(save_root_path,each_folder_json=false)
     @root = File.expand_path(save_root_path)
     @json_split = each_folder_json
 
