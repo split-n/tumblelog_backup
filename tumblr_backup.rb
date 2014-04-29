@@ -39,7 +39,11 @@ class TumblrBackupCli
         puts "download #{post.id}"
         @called_when_per_dl_finished.call
       rescue SaveFailedError
-        puts "save failed: #{post.id}"
+        msg = "save failed: #{post.id}"
+        warn msg
+        File.open(__dir__+'/error.log',"a"){|f|
+          f.puts msg
+        }
       end
     end
   end
