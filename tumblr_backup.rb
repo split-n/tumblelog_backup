@@ -22,7 +22,6 @@ class TumblrBackupCli
       @options[:split_json] = state[:split_json]
       @tl = ResumableTumblelog.restore(state[:tumblelog],api_key)
     else
-      binding.pry
       @options[:dest_dir] ||= default_dest_dir
       @tl = ResumableTumblelog.new(@options[:account],api_key)
     end
@@ -32,7 +31,6 @@ class TumblrBackupCli
   end
 
   def save_all!
-    binding.pry
     @tl.each_post do |post|
       begin
         @store.save(post)
@@ -89,7 +87,7 @@ class TumblrBackupCli
 
     begin
       key = YAML.load_file(api_key_file_path)
-      key_symbolized = required_keys.each_with_object({}){|(k,v),obj| obj[k.to_sym] = v}
+      key_symbolized = key.each_with_object({}){|(k,v),obj| obj[k.to_sym] = v}
       raise  unless required_keys.all?{|k| key_symbolized.has_key?(k) }
     rescue
       raise ApiKeyLoadFailedError
@@ -100,7 +98,8 @@ class TumblrBackupCli
 
   def load_state_file(state_file_path)
     required_keys = [:dest_dir,:split_json,:tumblelog]
-    resume_state = JSON.load(state_file_path,symbolize_names:true)
+    state_json = open(state_file_path).read
+    resume_state = JSON.parse(state_json,symbolize_names:true)
 
     raise StateFileLoadFailedError unless required_keys.all?{|k| resume_state.has_key?(k) }
 
