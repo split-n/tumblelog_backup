@@ -27,7 +27,9 @@ class TumblrBackupCli
     end
 
   @store = SaveStore.new(@options[:dest_dir],!!@options[:split_json])
-  @called_when_per_dl_finished = proc{}
+  @called_when_per_dl_finished = proc{
+    save_state_to_file
+    }
   end
 
   def save_all!
