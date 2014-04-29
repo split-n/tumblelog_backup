@@ -4,6 +4,7 @@ vendor/
 
 save/
 apikey.yml
+resume.json
 
 *.swp
 *.swo
