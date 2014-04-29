@@ -27,7 +27,7 @@ class TumblrBackupCli
     end
 
   @store = SaveStore.new(@options[:dest_dir],!!@options[:split_json])
-
+  @called_when_per_dl_finished = proc{}
   end
 
   def save_all!
@@ -35,12 +35,26 @@ class TumblrBackupCli
       begin
         @store.save(post)
         puts "download #{post.id}"
+        @called_when_per_dl_finished.call
       rescue SaveFailedError
         puts "save failed: #{post.id}"
       end
     end
   end
 
+
+  # これを実行すると、現在進行中のものをダウンロード後に
+  # blockを実行して終了する
+  def exit! 
+    @called_when_per_dl_finished = proc {
+      yield
+      save_state_to_file
+      exit(0)
+    }
+  end
+
+
+  private
   def save_state_to_file
     tl_state = @tl.save_state
     state = {
@@ -52,8 +66,6 @@ class TumblrBackupCli
     nil
   end
 
-
-  private
   def parse_options(argv)
     options = {}
     OptionParser.new do |parser|
@@ -139,9 +151,9 @@ rescue TumblrBackupCli::StateFileLoadFailedError
 end
 
 Signal.trap(:INT) do
-  puts "SIGINT detected,saving to state file."
-  cli.save_state_to_file
-  exit(0)
+  cli.exit! {
+    puts "SIGINT detected,saving to state file."
+  }
 end
 
 cli.save_all!
