@@ -1,8 +1,7 @@
 # encoding:utf-8
 class ResumableTumblelog
 
-  def self.restore(state_json,oauth_config)
-    state = JSON.parse(state_json,symbolize_names:true)
+  def self.restore(state,oauth_config)
     raise "Invalid state file" unless verify_state(state)
     me = self.new(state[:target_account],oauth_config)
     me.load(state)
@@ -44,12 +43,11 @@ class ResumableTumblelog
   end
 
   def save_state
-    state = {
+    {
       target_account: @base.tumblr_host,
       last_id: @last_id,
       next_count: @next_count
     }
-    JSON.generate(state)
   end
 
 end

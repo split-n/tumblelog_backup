@@ -71,7 +71,7 @@ describe ResumableTumblelog do
         last_id: 10**16,
         next_count: 0
       }
-      resumable = ResumableTumblelog.restore(JSON.generate(state),@config)
+      resumable = ResumableTumblelog.restore(state,@config)
 
       ids = resumable.each_post.map(&:id).to_a
       expect(ids).to eq expect_ids
@@ -83,7 +83,7 @@ describe ResumableTumblelog do
         last_id: expect_ids[3],
         next_count: 3
       }
-      resumable = ResumableTumblelog.restore(JSON.generate(state),@config)
+      resumable = ResumableTumblelog.restore(state,@config)
 
       ids = resumable.each_post.map(&:id).to_a
       expect(ids).to eq expect_ids[4..-1]
@@ -95,7 +95,7 @@ describe ResumableTumblelog do
         last_id: expect_ids[3],
         next_count: 2 # 現在の[3]を1個目のときに取得したという想定、2つ追加されている
       }
-      resumable = ResumableTumblelog.restore(JSON.generate(state),@config)
+      resumable = ResumableTumblelog.restore(state,@config)
 
       ids = resumable.each_post.map(&:id).to_a
       expect(ids).to eq expect_ids[4..-1]
@@ -107,7 +107,7 @@ describe ResumableTumblelog do
         last_id: expect_ids[7],
         next_count: 0
       }
-      resumable = ResumableTumblelog.restore(JSON.generate(state),@config)
+      resumable = ResumableTumblelog.restore(state,@config)
 
       ids = resumable.each_post.map(&:id).to_a
       expect(ids).to eq []
@@ -119,7 +119,7 @@ describe ResumableTumblelog do
         last_id: expect_ids[2],
         next_count: 5 #[4]で取得
       }
-      resumable = ResumableTumblelog.restore(JSON.generate(state),@config)
+      resumable = ResumableTumblelog.restore(state,@config)
 
       ids = resumable.each_post.map(&:id).to_a
       expect(ids).to eq expect_ids[3..-1]
