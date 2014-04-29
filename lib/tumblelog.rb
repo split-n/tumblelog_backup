@@ -1,31 +1,28 @@
 # encoding:utf-8
 class Tumblelog
-  include Enumerable
+  attr_reader :tumblr_host
 
   def initialize(tumblr_host,oauth_config)
-    @tumblr_host = tumblr_host
+    # ユーザー名のみを指定された場合でも、tumblrのFQDNに正規化する
+    @tumblr_host = tumblr_host.include?(".") ? tumblr_host : "#{tumblr_host}.tumblr.com"
     @client = Tumblr::Client.new(oauth_config)
     blog_info = @client.blog_info(@tumblr_host)
     if blog_info["status"] == 404
       raise ArgumentError.new("Invalid Hostname")
     else
-      @blog_info = blog_info
+      @blog_info = blog_info["blog"]
     end
   end
 
-
-  def each_post(&block)
-    unless block_given?
-      return self.to_enum(:each_post_ranged)
-    end
-
-    each_post_ranged &block
+  def post_count
+    @blog_info["posts"]
   end
 
-  def each_post_ranged(from=0,to=Float::INFINITY)
+
+  def each_post(from=0,to=Float::INFINITY)
     #  標準の引数の場合、eachと同等の動作をする
     unless block_given?
-      return self.to_enum(:each_post_ranged,from,to)
+      return self.to_enum(:each_post,from,to)
     end
 
     from.step(to,20) do |offset|

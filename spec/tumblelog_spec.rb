@@ -28,8 +28,16 @@ describe Tumblelog do
       @tumblelog = Tumblelog.new("testumr",@config)
     end
 
+    it "host名を取得できる" do
+      expect(@tumblelog.tumblr_host).to eq "testumr.tumblr.com"
+    end
+
     it "post数のカウントが正確" do
       expect(@tumblelog.each_post.count).to eq POSTS_COUNT
+    end
+
+    it "#post_count" do
+      expect(@tumblelog.post_count).to eq POSTS_COUNT
     end
 
     it "画像が1個" do
@@ -39,7 +47,7 @@ describe Tumblelog do
 
     it "range指定がうまくいく" do
       posts_from = 5
-      ranged_posts = @tumblelog.each_post_ranged(posts_from,Float::INFINITY).to_a
+      ranged_posts = @tumblelog.each_post(posts_from,Float::INFINITY).to_a
       cut_posts = @tumblelog.each_post.to_a[posts_from..-1]
       expect(
         ranged_posts.zip(cut_posts).any?{|pair|
@@ -60,18 +68,29 @@ describe Tumblelog do
       expect(posts[7]).to be_instance_of AnswerPost
     end
 
-    context "misc" do 
-      it "のeach_postへブロックを渡した結果が渡さない結果と同様" do
-        posts_id = []
-        @tumblelog.each_post do |post|
-          posts_id << post.id
-        end
+    it "全部のpostのidが正確" do
+      expect_ids = [71307438418,71307185951,71305811722,
+       71305688040,71303584893,71302197206,
+       71302135845,71302067438
+      ]
+      ids = @tumblelog.each_post.map(&:id)
+      expect(ids).to eq expect_ids
+    end
+  end
 
-        expect(posts_id).to eq @tumblelog.each_post.to_a.map(&:id)
-      end
-
+  context "misc" do 
+    before :all do
+      @testumr = Tumblelog.new("testumr",@config)
     end
 
+    it "のeach_postへブロックを渡した結果が渡さない結果と同様" do
+      posts_id = []
+      @testumr.each_post do |post|
+        posts_id << post.id
+      end
+
+      expect(posts_id).to eq @testumr.each_post.to_a.map(&:id)
+    end
   end
 
 end
