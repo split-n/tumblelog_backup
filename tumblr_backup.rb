@@ -27,7 +27,9 @@ class TumblrBackupCli
     end
 
   @store = SaveStore.new(@options[:dest_dir],!!@options[:split_json])
-  @called_when_per_dl_finished = proc{}
+  @called_when_per_dl_finished = proc{
+    save_state_to_file
+    }
   end
 
   def save_all!
@@ -37,7 +39,11 @@ class TumblrBackupCli
         puts "download #{post.id}"
         @called_when_per_dl_finished.call
       rescue SaveFailedError
-        puts "save failed: #{post.id}"
+        msg = "save failed: #{post.id}"
+        warn msg
+        File.open(__dir__+'/error.log',"a"){|f|
+          f.puts msg
+        }
       end
     end
   end
