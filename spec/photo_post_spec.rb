@@ -39,6 +39,14 @@ describe PhotoPost do
       expect(JSON.load(json)).to eq data
     end
 
+    it "古くてoriginal_sizeのurlに拡張子がついてないpostでも問題ない" do
+      # 下記のようなコードで実際に問題となるpostを取得できる
+      # tl.each_post.lazy.select{|p|p.type == :photo}.map{|p| [p,p.send(:image_urls)]}.reject{|p| p[1][0] =~ /\.\w{3}$/}.first
+      json = File.read("#{__dir__}/file/no_highres_extension.json")
+      post = PhotoPost.new(JSON.load(json))
+      expect(post.extension).to eq ".jpg"
+    end
+
   end
   context "異常系" do
     it "適当な内容だとインスタンスが生成されない" do
