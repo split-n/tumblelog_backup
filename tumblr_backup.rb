@@ -44,6 +44,15 @@ class TumblrBackupCli
         File.open(__dir__+'/error.log',"a"){|f|
           f.puts msg
         }
+      rescue => e
+        msg = "unknown error: #{post.id}"
+        warn msg
+        warn e
+        File.open(__dir__+'/error.log',"a"){|f|
+          f.puts msg
+          f.puts e
+        }
+        binding.pry if @options[:debug]
       end
     end
   end
