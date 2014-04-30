@@ -1,7 +1,7 @@
 # encoding:utf-8
 class PhotoPost < Post
   def extension
-    File.extname(image_data[0])
+    image_data[2]
   end
 
   def photo
@@ -17,7 +17,16 @@ class PhotoPost < Post
     unless @image_data
       @image_data = image_urls.lazy.map {|url|
         result = try_open_url(url)
-        result ? [url,result] : nil
+        if result
+          extension = File.extname(url)
+          if extension == ""
+            extension = image_urls.map{|l| File.extname(l)}.find{|ex| ex != ""}
+            raise if extension == ""
+          end
+          [url,result,extension]
+        else
+          nil
+        end
       }.reject(&:nil?).first
     end
     return @image_data
