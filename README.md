@@ -15,6 +15,6 @@ apikey.yml.sampleにそれぞれ書き込み、apikey.ymlとして保存
 バックアップ開始:  
 `$ bundle exec ruby tumblr_backup.rb -a your_account_name_or_domain`  
 => .rbと同じディレクトリのsave/[アカウント名]/ に保存される  
-Ctrl+C(SIGINT)で保存を一時中断  
+Ctrl+Cなどでプログラムを終了しても、後でリジュームが可能  
 `$ bundle exec ruby tumblr_backup.rb -r`   
 => 前回の保存完了位置から保存

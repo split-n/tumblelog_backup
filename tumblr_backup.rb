@@ -10,11 +10,12 @@ class TumblrBackupCli
   class ApiKeyLoadFailedError < StandardError;end
   class StateFileLoadFailedError < StandardError;end
 
-  def initialize(argv,state_file_path,api_key_file_path,default_dest_dir)
+  def initialize(argv,state_file_path,api_key_file_path,default_dest_dir,error_log_file_path)
     @options = parse_options(argv)
     require_gems
     api_key = load_api_key(api_key_file_path)
     @state_file_path = state_file_path
+    @error_log_file_path = error_log_file_path
 
     if @options[:resume]
       state = load_state_file(state_file_path)
@@ -38,20 +39,12 @@ class TumblrBackupCli
         @store.save(post)
         puts "download #{post.id}"
         @called_when_per_dl_finished.call
-      rescue SaveFailedError
-        msg = "save failed: #{post.id}"
-        warn msg
-        File.open(__dir__+'/error.log',"a"){|f|
-          f.puts msg
-        }
+      rescue SaveFailedError => e
+        warn "save failed: #{post.id}"
+        log_exception(post,e)
       rescue => e
-        msg = "unknown error: #{post.id}"
-        warn msg
-        warn e
-        File.open(__dir__+'/error.log',"a"){|f|
-          f.puts msg
-          f.puts e
-        }
+        warn "unknown error: #{post.id}"
+        log_exception(post,e)
         binding.pry if @options[:debug]
       end
     end
@@ -70,6 +63,15 @@ class TumblrBackupCli
 
 
   private
+  def log_exception(post,ex)
+    File.open(@error_log_file_path,"a"){|f|
+      f.puts "---------"
+      f.puts "id:#{post.id}"
+      f.puts ex.inspect
+      f.puts ex.backtrace
+    }
+  end
+
   def save_state_to_file
     tl_state = @tl.save_state
     state = {
@@ -139,9 +141,10 @@ end
 State_file_path = File.expand_path(__dir__) + "/resume.json"
 Api_key_file_path = File.expand_path(__dir__) + "/apikey.yml"
 Dest_dir = File.expand_path(__dir__) + "/save/"
+LogFile_path = File.expand_path(__dir__) + "/error.log"
 
 begin
-cli = TumblrBackupCli.new(ARGV,State_file_path,Api_key_file_path,Dest_dir)
+cli = TumblrBackupCli.new(ARGV,State_file_path,Api_key_file_path,Dest_dir,LogFile_path)
 rescue ArgumentError
   warn <<-'EOF'
   Basic Usage: ./tumblr_backup.rb -a SAVE_TARGET_NAME_OR_DOMAIN [-o OUTPUT_DIR] [-s ] 
