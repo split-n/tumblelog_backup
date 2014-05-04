@@ -1,6 +1,7 @@
 # encoding:utf-8
 require 'open-uri'
-require_relative './loader'
+require_relative './save_directory.rb'
+require_relative './posts_loader.rb'
 
 class SaveFailedError < RuntimeError ; end
 

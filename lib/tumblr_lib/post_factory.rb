@@ -1,4 +1,5 @@
 # encoding:utf-8
+require_relative './posts_loader.rb'
 class PostFactory
   TYPES = %w(text quote link answer video audio photo chat).map(&:to_sym)
   def self.create(hash)

@@ -1,8 +1,8 @@
 # encoding:utf-8
 require 'bundler'
-require_relative '../lib/loader.rb'
+require_relative '../lib/tumblr_lib/save_store.rb'
 require 'tmpdir'
-Bundler.require
+require 'json'
 
 describe SaveStore do
   context "PhotoPostを保存できる" do

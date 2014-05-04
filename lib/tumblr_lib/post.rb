@@ -1,4 +1,6 @@
 # encoding:utf-8
+require 'bundler/setup'
+require 'json'
 class Post
   def initialize(post_data)
     @data = post_data

@@ -1,6 +1,6 @@
 # encoding:utf-8
 require 'bundler'
-require_relative '../lib/loader.rb'
+require_relative '../lib/tumblr_lib/post_factory.rb'
 Bundler.require
 
 describe PostFactory do
