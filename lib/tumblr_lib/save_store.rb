@@ -3,8 +3,6 @@ require 'open-uri'
 require_relative './save_directory.rb'
 require_relative './posts_loader.rb'
 
-class SaveFailedError < RuntimeError ; end
-
 class SaveStore
   def initialize(save_root_dir,split_json_dir)
     @dir = SaveDirectory.new(save_root_dir,split_json_dir)
