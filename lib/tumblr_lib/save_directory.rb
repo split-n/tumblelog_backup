@@ -1,5 +1,5 @@
 # encoding:utf-8
-require_relative './loader'
+require_relative './post_factory.rb'
 
 class SaveDirectory
   attr_reader :for_content, :for_json

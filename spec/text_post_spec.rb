@@ -1,8 +1,8 @@
 # encoding:utf-8
 require 'bundler'
-require_relative '../lib/loader.rb'
+require_relative '../lib/tumblr_lib/misc_post.rb'
 require 'tmpdir'
-Bundler.require
+require 'json'
 
 describe TextPost do
   before :all do

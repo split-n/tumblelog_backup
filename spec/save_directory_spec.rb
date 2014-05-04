@@ -1,8 +1,7 @@
 # encoding:utf-8
 require 'bundler'
-require_relative '../lib/loader.rb'
+require_relative '../lib/tumblr_lib/save_directory.rb'
 require 'tmpdir'
-Bundler.require
 
 describe SaveDirectory do
 

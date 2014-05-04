@@ -1,8 +1,7 @@
 # encoding:utf-8
 require 'open-uri'
-require_relative './loader'
-
-class SaveFailedError < RuntimeError ; end
+require_relative './save_directory.rb'
+require_relative './posts_loader.rb'
 
 class SaveStore
   def initialize(save_root_dir,split_json_dir)
@@ -10,21 +9,27 @@ class SaveStore
   end
 
   def save(post)
+    saved_path = save_json(post)
     case post
     when PhotoPost
       save_photo(post)
+    else
+      saved_path # just returns json's path
     end
-    save_json(post)
   end
 
   private
   def save_json(post)
-    File.write("#{@dir.for_json[post.type]}/#{post.id}.json",post.json)
+    path = "#{@dir.for_json[post.type]}/#{post.id}.json"
+    File.write(path,post.json)
+    path
   end
 
   def save_photo(post)
     filename = "#{post.id}#{post.extension}"
-    File.binwrite("#{@dir.for_content[post.type]}/#{filename}",post.photo.read)
+    path = "#{@dir.for_content[post.type]}/#{filename}"
+    File.binwrite(path,post.photo.read)
+    path
   end
 
 end

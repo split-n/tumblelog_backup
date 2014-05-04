@@ -1,8 +1,8 @@
 # encoding:utf-8
 require 'bundler'
-require_relative '../lib/loader.rb'
+require 'json'
+require_relative '../lib/tumblr_lib/photo_post.rb'
 require 'tmpdir'
-Bundler.require
 
 describe PhotoPost do
   before :all do

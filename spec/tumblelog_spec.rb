@@ -1,8 +1,7 @@
 # encoding:utf-8
 require 'yaml'
 require 'bundler'
-require_relative '../lib/loader.rb'
-Bundler.require
+require_relative '../lib/tumblr_lib/tumblelog.rb'
 
 describe Tumblelog do
   before :all do

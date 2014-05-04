@@ -1,4 +1,7 @@
 # encoding:utf-8
+require_relative './post_factory.rb'
+require 'bundler/setup'
+require 'tumblr_client'
 class Tumblelog
   attr_reader :tumblr_host
 

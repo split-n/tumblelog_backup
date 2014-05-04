@@ -1,4 +1,5 @@
 # encoding:utf-8
+require_relative './tumblelog.rb'
 class ResumableTumblelog
 
   def self.restore(state,oauth_config)
