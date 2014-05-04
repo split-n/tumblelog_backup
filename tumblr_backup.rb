@@ -29,6 +29,10 @@ def parse_options(argv=ARGV)
   options
 end
 
+def windows?
+  !!(RUBY_PLATFORM.downcase =~ /mswin(?!ce)|mingw|cygwin|bccwin/)
+end
+
 ## BEGIN MAIN
 
 logger = Logger.new(LogFile_path)
@@ -59,7 +63,9 @@ rescue TumblrBackupRunner::StateFileLoadFailedError
   EOF
 end
 
-[:INT,:TERM,:HUP].each do |sig|
+signals = [:INT,:TERM]
+signals << :HUP unless windows?
+signals.each do |sig|
   Signal.trap(sig) do
     runner.exit! {
       puts "#{sig} detected,saving state to file and going to exit."
