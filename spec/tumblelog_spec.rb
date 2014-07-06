@@ -51,7 +51,7 @@ describe Tumblelog do
       expect(
         ranged_posts.zip(cut_posts).any?{|pair|
           pair[0].id != pair[1].id } 
-      ).to be_false
+      ).to be_falsy
     end
 
     it "全部のpostのクラスが正確" do

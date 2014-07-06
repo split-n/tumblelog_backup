@@ -18,28 +18,28 @@ describe SaveDirectory do
       dir = SaveDirectory.new(@save_root_path,false)
       expect_dir = @save_root_path + '/photo'
       expect(dir.for_content[:photo]).to eq expect_dir
-      expect(Dir.exist? expect_dir).to be_true
+      expect(Dir.exist? expect_dir).to be_truthy
     end
 
     it "分離されたcontentフォルダを取得できる" do
       dir = SaveDirectory.new(@save_root_path,true)
       expect_dir = @save_root_path + '/photo/photo'
       expect(dir.for_content[:photo]).to eq expect_dir
-      expect(Dir.exist? expect_dir).to be_true
+      expect(Dir.exist? expect_dir).to be_truthy
     end
 
     it "分離されていないjsonフォルダを取得できる" do
       dir = SaveDirectory.new(@save_root_path,false)
       expect_dir = @save_root_path + '/json'
       expect(dir.for_json[:photo]).to eq expect_dir
-      expect(Dir.exist? expect_dir).to be_true
+      expect(Dir.exist? expect_dir).to be_truthy
     end
 
     it "分離されたjsonフォルダを取得できる" do
       dir = SaveDirectory.new(@save_root_path,true)
       expect_dir = @save_root_path + '/photo/json'
       expect(dir.for_json[:photo]).to eq expect_dir
-      expect(Dir.exist? expect_dir).to be_true
+      expect(Dir.exist? expect_dir).to be_truthy
     end
   end
 
@@ -56,7 +56,7 @@ describe SaveDirectory do
       dir = SaveDirectory.new(@save_root_path+'/',false)
       expect_dir = @save_root_path + '/photo'
       expect(dir.for_content[:photo]).to eq expect_dir
-      expect(Dir.exist? expect_dir).to be_true
+      expect(Dir.exist? expect_dir).to be_truthy
     end
   end
 end
